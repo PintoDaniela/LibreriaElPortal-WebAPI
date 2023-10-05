@@ -83,7 +83,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 if (await _Context.SaveChangesAsync() > 0)
                 {
                     // Después de guardar, newCliente.ClienteId contendrá el ID generado automáticamente.
-                    // Crea un ClienteDto usando el ID y los otros datos.
+                    
                     var clienteDto = _mapper.Map<ClienteDto>(newCliente);
                    /* var clienteDto = new ClienteDto
                     {
@@ -108,12 +108,44 @@ namespace LibreriaElPortal_WebAPI.Repositories
 
         public async Task<bool> DeleteClienteAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cliente = await _Context.Clientes
+                 .Where(c => c.ClienteId == id)
+                 .FirstOrDefaultAsync();
+
+                if (cliente == null)
+                {
+                    return false;
+                }
+                _Context.Remove(cliente);
+                return await _Context.SaveChangesAsync() > 0 ? true : false;
+            }
+            catch 
+            {
+                return false; 
+            }
         }
 
-        public async Task<bool> UpdateClienteAsync(ClienteDto cliente)
+        public async Task<bool> UpdateClienteAsync(ClienteDto clienteDto)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var cliente = _mapper.Map<Cliente>(clienteDto);                
+                _Context.Update(cliente);
+                var resultado = await _Context.SaveChangesAsync() > 0 ? true : false;
+                return resultado;
+            }
+            catch 
+            { 
+                return false;
+            }
+        }
+
+        public async Task<bool> ExisteCliente(int id)
+        {
+            var existeCliente =  await _Context.Clientes.AnyAsync(c => c.ClienteId == id);
+            return existeCliente;
         }
     }
 }

@@ -58,6 +58,40 @@ namespace LibreriaElPortal_WebAPI.Controllers
             
             return CreatedAtAction(nameof(GetCliente), new { id = nuevoCliente.ClienteId }, nuevoCliente);
         }
-    
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCliente([FromBody] ClienteDto cliente)
+        {
+            var extiste = await _clienteRepository.ExisteCliente(cliente.ClienteId);
+
+            if(!extiste)
+            {
+               return NotFound("No se encontró el cliente que intenta actualizar.");
+            }
+            var clienteActualizado = await _clienteRepository.UpdateClienteAsync(cliente);
+            if (!clienteActualizado)
+            {
+                return StatusCode(500, "Hubo un error al actualizar el cliente");
+            }
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCliente(int clienteId)
+        {
+            var extiste = await _clienteRepository.ExisteCliente(clienteId);
+
+            if (!extiste)
+            {
+                return NotFound("No se encontró el cliente que intenta eliminar.");
+            }
+
+            var clienteEliminado = await _clienteRepository.DeleteClienteAsync(clienteId);
+            if (!clienteEliminado)
+            {
+                return StatusCode(500, "Hubo un error al eliminar el cliente");
+            }
+            return NoContent();
+        }
     }
 }

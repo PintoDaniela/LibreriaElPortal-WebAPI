@@ -9,6 +9,7 @@ namespace LibreriaElPortal_WebAPI.Interfaces
         Task<ClienteDto?> GetClienteAsync(int id);
         Task<ClienteDto> CreateClienteAsync(AgregarClienteDto cliente); 
         Task<bool> UpdateClienteAsync(ClienteDto cliente); 
-        Task<bool> DeleteClienteAsync(int id); 
+        Task<bool> DeleteClienteAsync(int id);
+        Task<bool> ExisteCliente(int id);
     }
 }
