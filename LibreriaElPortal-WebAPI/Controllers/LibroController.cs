@@ -1,4 +1,5 @@
-﻿using LibreriaElPortal_WebAPI.Models;
+﻿using LibreriaElPortal_WebAPI.Interfaces;
+using LibreriaElPortal_WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,17 +9,23 @@ namespace LibreriaElPortal_WebAPI.Controllers
     [ApiController]
     public class LibroController : Controller
     {       
-        public readonly elportalContext _context; 
-        public LibroController(elportalContext context)
+        public readonly ILibroRepository _libroRepository; 
+        public LibroController(ILibroRepository libroRepository)
         {
-            _context = context;            
+            _libroRepository = libroRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetLibros()
         {
-            return Ok(await _context.Libros
-                .ToListAsync());
+            var listaLibros = await _libroRepository.GetLibrosAsync();
+
+            if (listaLibros == null)
+            {
+                return NotFound("No se encontraron registros.");
+            }
+
+            return Ok(listaLibros);
         }
     }
 }
