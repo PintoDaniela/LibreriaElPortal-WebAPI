@@ -58,7 +58,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 .Where(c => c.ClienteId == id)
                 .FirstOrDefaultAsync();
 
-                if (cliente == null)
+                if (cliente != null)
                 {
                     ClienteDto clienteDto = _mapper.Map<ClienteDto>(cliente);
                     return clienteDto;
