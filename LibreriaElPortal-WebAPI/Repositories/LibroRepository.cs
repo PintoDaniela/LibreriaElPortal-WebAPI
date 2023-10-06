@@ -60,11 +60,11 @@ namespace LibreriaElPortal_WebAPI.Repositories
         {
             try
             {
-                var libroParaCrear = _mapper.Map<Libro>(libro);
-                var nuevoLibro = await _context.Libros.AddAsync(libroParaCrear);
-                if (nuevoLibro != null)
+                var libroNuevo = _mapper.Map<Libro>(libro);
+                await _context.Libros.AddAsync(libroNuevo);
+                if (await _context.SaveChangesAsync() > 0)
                 {
-                    return _mapper.Map<LibroDto>(nuevoLibro);
+                    return _mapper.Map<LibroDto>(libroNuevo);
                 }
                 return null;
             }
@@ -103,11 +103,11 @@ namespace LibreriaElPortal_WebAPI.Repositories
             return resultado > 0;
         }
 
-        public async Task<bool> ExisteLibro(string Isbn)
+        public async Task<bool> ExisteLibroAsync(string Isbn)
         {
             try
             {
-                bool existe = await _context.Libros.AllAsync(l => l.Isbn == Isbn);
+                bool existe = await _context.Libros.AnyAsync(l => l.Isbn == Isbn);
                 return existe;
             }
             catch

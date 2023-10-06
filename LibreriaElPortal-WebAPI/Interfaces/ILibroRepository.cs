@@ -9,6 +9,6 @@ namespace LibreriaElPortal_WebAPI.Interfaces
         Task<LibroDto> CreateLibroAsync(LibroDto libro);
         Task<bool> UpdateLibroAsync(LibroDto libro);
         Task<bool> DeleteLibroAsync(string isbn);
-        Task<bool> ExisteLibro(string isbn);//Sólo si no hay ventas asociadas
+        Task<bool> ExisteLibroAsync(string isbn);//Sólo si no hay ventas asociadas
     }
 }

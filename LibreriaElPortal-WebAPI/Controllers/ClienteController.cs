@@ -2,6 +2,7 @@
 using LibreriaElPortal_WebAPI.DTOs;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
+using LibreriaElPortal_WebAPI.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,8 +32,6 @@ namespace LibreriaElPortal_WebAPI.Controllers
             
             return Ok(listaClientes);
         }
-
-
         
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCliente(int id)
@@ -49,7 +48,12 @@ namespace LibreriaElPortal_WebAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CrearCliente([FromBody] AgregarClienteDto cliente)
-        {
+        {     
+            var existe = _clienteRepository.GetClienteByEmailAsync(cliente.Email);
+            if (existe != null)
+            {
+                return BadRequest("Ya existe un cliente con el email ingresado.");
+            }
             var nuevoCliente = await _clienteRepository.CreateClienteAsync(cliente);
             if (nuevoCliente == null)
             {
@@ -62,7 +66,7 @@ namespace LibreriaElPortal_WebAPI.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateCliente([FromBody] ClienteDto cliente)
         {
-            var extiste = await _clienteRepository.ExisteCliente(cliente.ClienteId);
+            var extiste = await _clienteRepository.ExisteClienteAsync(cliente.ClienteId);
 
             if(!extiste)
             {
@@ -79,7 +83,7 @@ namespace LibreriaElPortal_WebAPI.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteCliente(int clienteId)
         {
-            var extiste = await _clienteRepository.ExisteCliente(clienteId);
+            var extiste = await _clienteRepository.ExisteClienteAsync(clienteId);
 
             if (!extiste)
             {

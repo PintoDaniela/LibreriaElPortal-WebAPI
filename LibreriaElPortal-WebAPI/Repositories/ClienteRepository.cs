@@ -142,10 +142,27 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
         }
 
-        public async Task<bool> ExisteCliente(int id)
+        public async Task<bool> ExisteClienteAsync(int id)
         {
             var existeCliente =  await _Context.Clientes.AnyAsync(c => c.ClienteId == id);
             return existeCliente;
+        }
+
+        public async Task<ClienteDto?> GetClienteByEmailAsync(string email)
+        {
+            try
+            {
+                var cliente = await _Context.Clientes.FirstOrDefaultAsync(c => c.Email == email);
+                if (cliente == null)
+                {
+                    return null;
+                }
+                return _mapper.Map<ClienteDto?>(cliente);
+            }
+            catch 
+            { 
+                return null; 
+            }
         }
     }
 }
