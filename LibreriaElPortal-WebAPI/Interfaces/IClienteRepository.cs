@@ -7,7 +7,7 @@ namespace LibreriaElPortal_WebAPI.Interfaces
     {
         Task<ICollection<ClienteDto>?> GetClientesAsync();
         Task<ClienteDto?> GetClienteAsync(int id);
-        Task<ClienteDto?> GetClienteByEmailAsync(string email);
+        Task<bool> ExisteClienteByEmailAsync(string email);
         Task<ClienteDto> CreateClienteAsync(AgregarClienteDto cliente); 
         Task<bool> UpdateClienteAsync(ClienteDto cliente); 
         Task<bool> DeleteClienteAsync(int id);

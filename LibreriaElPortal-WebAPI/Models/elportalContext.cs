@@ -21,7 +21,14 @@ namespace LibreriaElPortal_WebAPI.Models
         public virtual DbSet<Libro> Libros { get; set; } = null!;
         public virtual DbSet<Venta> Ventas { get; set; } = null!;
 
-        
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Name=DefaultConnection");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Cliente>(entity =>
@@ -31,6 +38,8 @@ namespace LibreriaElPortal_WebAPI.Models
                 entity.Property(e => e.Email)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.Property(e => e.FechaAlta).HasColumnType("datetime");
 
                 entity.Property(e => e.Nombre)
                     .HasMaxLength(100)
@@ -60,12 +69,14 @@ namespace LibreriaElPortal_WebAPI.Models
                 entity.HasOne(d => d.IsbnNavigation)
                     .WithMany(p => p.DetalleVenta)
                     .HasForeignKey(d => d.Isbn)
-                    .HasConstraintName("FK__DetalleVen__ISBN__5165187F");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DetalleVen__ISBN__5AEE82B9");
 
                 entity.HasOne(d => d.Venta)
                     .WithMany(p => p.DetalleVenta)
                     .HasForeignKey(d => d.VentaId)
-                    .HasConstraintName("FK__DetalleVe__Venta__5070F446");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__DetalleVe__Venta__5BE2A6F2");
             });
 
             modelBuilder.Entity<Libro>(entity =>

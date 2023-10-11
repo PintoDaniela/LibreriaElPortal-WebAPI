@@ -79,20 +79,14 @@ namespace LibreriaElPortal_WebAPI.Repositories
             try
             {
                 var newCliente = _mapper.Map<Cliente>(cliente);
+                newCliente.FechaAlta = DateTime.Now;
                 await _Context.Clientes.AddAsync(newCliente);
                 if (await _Context.SaveChangesAsync() > 0)
                 {
-                    // Después de guardar, newCliente.ClienteId contendrá el ID generado automáticamente.
-                    
+                    // Después de guardar, newCliente.ClienteId contendrá el ID generado automáticamente.                    
                     var clienteDto = _mapper.Map<ClienteDto>(newCliente);
-                   /* var clienteDto = new ClienteDto
-                    {
-                        ClienteId = newCliente.ClienteId,
-                        Nombre = newCliente.Nombre,
-                        Email = newCliente.Email,
-                        Telefono = newCliente.Telefono
-                    };*/
-
+                    clienteDto.FechaAlta = DateTime.Now;
+                   
                     // Devuelve el objeto ClienteDto.
                     return clienteDto;
                 }
@@ -131,7 +125,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
         {
             try
             {
-                var cliente = _mapper.Map<Cliente>(clienteDto);                
+                var cliente = _mapper.Map<Cliente>(clienteDto);
                 _Context.Update(cliente);
                 var resultado = await _Context.SaveChangesAsync() > 0 ? true : false;
                 return resultado;
@@ -148,21 +142,10 @@ namespace LibreriaElPortal_WebAPI.Repositories
             return existeCliente;
         }
 
-        public async Task<ClienteDto?> GetClienteByEmailAsync(string email)
-        {
-            try
-            {
-                var cliente = await _Context.Clientes.FirstOrDefaultAsync(c => c.Email == email);
-                if (cliente == null)
-                {
-                    return null;
-                }
-                return _mapper.Map<ClienteDto?>(cliente);
-            }
-            catch 
-            { 
-                return null; 
-            }
+        public async Task<bool> ExisteClienteByEmailAsync(string email)
+        {            
+            var existeCliente = await _Context.Clientes.AnyAsync(c => c.Email == email);
+            return existeCliente;                
         }
     }
 }

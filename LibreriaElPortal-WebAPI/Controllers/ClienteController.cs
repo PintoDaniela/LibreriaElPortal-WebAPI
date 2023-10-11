@@ -48,9 +48,9 @@ namespace LibreriaElPortal_WebAPI.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CrearCliente([FromBody] AgregarClienteDto cliente)
-        {     
-            var existe = _clienteRepository.GetClienteByEmailAsync(cliente.Email);
-            if (existe != null)
+        {
+            var existe = await _clienteRepository.ExisteClienteByEmailAsync(cliente.Email);
+            if (existe)
             {
                 return BadRequest("Ya existe un cliente con el email ingresado.");
             }

@@ -78,7 +78,10 @@ namespace LibreriaElPortal_WebAPI.Repositories
         {
             try
             {
-                var libroParaBorrar = await _context.Libros.Where(l => l.Isbn.Equals(Isbn)).FirstOrDefaultAsync();
+                var libroParaBorrar = await _context.Libros
+                    .Where(l => l.Isbn.Equals(Isbn))
+                    .FirstOrDefaultAsync();
+
                 if (libroParaBorrar != null)
                 {
                     _context.Libros.Remove(libroParaBorrar);
