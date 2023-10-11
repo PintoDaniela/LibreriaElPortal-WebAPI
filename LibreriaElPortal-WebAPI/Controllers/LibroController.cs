@@ -28,6 +28,20 @@ namespace LibreriaElPortal_WebAPI.Controllers
 
             return Ok(listaLibros);
         }
+
+        [HttpGet("{isbn}")]
+        public async Task<IActionResult> GetLibro(string isbn)
+        {
+            var libro = await _libroRepository.GetLibroAsync(isbn);
+
+            if (libro == null)
+            {
+                return NotFound("No se encontró el libro.");
+            }
+
+            return Ok(libro);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateLibro(LibroDto libro)
         {
@@ -44,6 +58,41 @@ namespace LibreriaElPortal_WebAPI.Controllers
             }
 
             return CreatedAtAction(nameof(CreateLibro), new { id = libroNuevo.Isbn }, libroNuevo);
+        }
+        
+        [HttpPut]
+        public async Task<IActionResult> UpdateLibro(LibroDto libro)
+        {
+            var existe = await _libroRepository.ExisteLibroAsync(libro.Isbn);
+            if (!existe)
+            {
+                return BadRequest("No se encuentra el libro que intenta actualizar.");
+            }
+            var libroActualizado = await _libroRepository.UpdateLibroAsync(libro);
+
+            if (!libroActualizado)
+            {
+                return StatusCode(500, $"Hubo un error al actualizar el libro {libro.Titulo}.");
+            }
+
+            return NoContent();
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteLibro(LibroDto libro)
+        {
+            var existe = await _libroRepository.ExisteLibroAsync(libro.Isbn);
+            if (!existe)
+            {
+                return BadRequest("No se encuentra el libro que intenta eliminar.");
+            }
+            var libroEliminado = await _libroRepository.DeleteLibroAsync(libro.Isbn);
+
+            if (!libroEliminado)
+            {
+                return StatusCode(500, $"Hubo un error al remover el libro {libro.Titulo}.");
+            }
+
+            return NoContent();
         }
     }
 }
