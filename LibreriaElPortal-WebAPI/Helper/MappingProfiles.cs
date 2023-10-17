@@ -14,6 +14,10 @@ namespace LibreriaElPortal_WebAPI.Helper
             CreateMap<Cliente, ClienteDto>();
             CreateMap<ClienteDto, Cliente>();
             CreateMap<AgregarClienteDto, Cliente>();
+            CreateMap<VentaDto, Venta>();
+            CreateMap<Venta, VentaDto>();
+            CreateMap<DetalleVentaDto, DetalleVentum>();
+            CreateMap<DetalleVentum, DetalleVentaDto>();
         }
     }
 }
