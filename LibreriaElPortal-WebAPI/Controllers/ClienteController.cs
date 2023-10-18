@@ -44,7 +44,7 @@ namespace LibreriaElPortal_WebAPI.Controllers
         }
 
         /// <summary>
-        /// Devuelve el cliente que coincida con el id proporcionado.
+        /// Recibe un id de cliente por url y devuelve el cliente al cual corresponda.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
