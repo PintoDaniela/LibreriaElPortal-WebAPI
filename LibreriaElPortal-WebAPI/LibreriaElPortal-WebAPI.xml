@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LibreriaElPortal-WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.Get">
+            <summary>
+            Devuelve el listado completo de clientes activos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.GetCliente(System.Int32)">
+            <summary>
+            Devuelve el cliente que coincida con el id proporcionado.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.CrearCliente(LibreriaElPortal_WebAPI.DTOs.AgregarClienteDto)">
+            <summary>
+            Recibe información de un cliente desde el cuerpo de la solicitud (ver ejemplo de "Request Body") para crear un nuevo registro.
+            </summary>
+            <param name="cliente"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.UpdateCliente(LibreriaElPortal_WebAPI.DTOs.ClienteDto)">
+            <summary>
+            Recibe información de un cliente desde el cuerpo de la solicitud (ver ejemplo de "Request Body") para actualizar un registro existente.
+            </summary>
+            <param name="cliente"></param>
+            <returns></returns>
+        </member>
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.DeleteCliente(System.Int32)">
+            <summary>
+            Recibe el id de un cliente por url y elimina el registro de la base de datos.
+            </summary>
+            <param name="clienteId"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

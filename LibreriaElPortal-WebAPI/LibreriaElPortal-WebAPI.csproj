@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>LibreriaElPortal_WebAPI</RootNamespace>
     <UserSecretsId>6515dfdf-f3bc-4b13-b0ea-239d54a9a456</UserSecretsId>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>LibreriaElPortal-WebAPI.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
