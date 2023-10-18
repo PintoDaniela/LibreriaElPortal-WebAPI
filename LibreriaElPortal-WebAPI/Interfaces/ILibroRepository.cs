@@ -10,5 +10,8 @@ namespace LibreriaElPortal_WebAPI.Interfaces
         Task<bool> UpdateLibroAsync(LibroDto libro);
         Task<bool> DeleteLibroAsync(string isbn);
         Task<bool> ExisteLibroAsync(string isbn);//Sólo si no hay ventas asociadas
+        Task<bool?> UpdateStockLibroAsync(string isbn, int cantidadVendida);
+        Task<int> GetStockLibroAsync(string isbn);
+        Task<decimal> GetPrecioLibroAsync(string isbn);
     }
 }
