@@ -3,6 +3,7 @@ using LibreriaElPortal_WebAPI.DTOs;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibreriaElPortal_WebAPI.Repositories
@@ -30,7 +31,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 //Si tengo ventas, recorro la lista de ventas para buscar los detalles y agregarlos a cada una.
                 if (ventas != null)
                 {
-                    foreach(var venta in ventas)
+                    foreach (var venta in ventas)
                     {
                         //Uso el mapper para convertir del modelo venta a ventaDTO
                         VentaDto ventaDto = _mapper.Map<VentaDto>(venta);
@@ -44,7 +45,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
                         VentasDto.Add(ventaDto);
                     }
                 }
-                return VentasDto;                
+                return VentasDto;
 
             }
             catch (Exception ex)
@@ -97,7 +98,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
         {
             var ventaCreada = new VentaDto();
             try
-            {                
+            {
                 var ventaNueva = _mapper.Map<Venta>(venta);
                 ventaNueva.FechaVenta = DateTime.Now;
 
@@ -108,32 +109,18 @@ namespace LibreriaElPortal_WebAPI.Repositories
 
                 var detallesVenta = _mapper.Map<List<DetalleVentum>>(venta.Detalles);
                 foreach (var nuevoDetalle in detallesVenta)
-                {                    
+                {
+                    //Seteo los atributos del detalle.
                     nuevoDetalle.VentaId = ventaNueva.VentaId;
                     nuevoDetalle.PrecioUnitario = _libroRepository.GetPrecioLibroAsync(nuevoDetalle.Isbn).Result;
-                    /*
-                    nuevoDetalle.PrecioUnitario = await _Context.Libros
-                                                 .Where(l => l.Isbn == nuevoDetalle.Isbn)
-                                                 .Select(l => l.Precio)
-                                                 .FirstOrDefaultAsync();
-                    */
+
                     await _Context.DetalleVenta.AddAsync(nuevoDetalle);
                     _Context.SaveChanges();
 
-                    //Descuento el stock del libro
+                    //Descuento el stock del libro.
                     await _libroRepository.UpdateStockLibroAsync(nuevoDetalle.Isbn, nuevoDetalle.Cantidad);
-                    /*
-                    var libroParaActualizar = await _Context.Libros
-                        .Where(l => l.Isbn == nuevoDetalle.Isbn)
-                        .FirstOrDefaultAsync();
 
-                    if(libroParaActualizar != null)
-                    {
-                        libroParaActualizar.Stock -= nuevoDetalle.Cantidad;
-                        _Context.Libros.Update(libroParaActualizar);
-                        _Context.SaveChanges();
-                    }
-                   */
+                    //Agrego el detalle de la venta a la lista de detalles del objeto "ventaCreada".
                     var detalleCreado = _mapper.Map<DetalleVentaDto>(nuevoDetalle);
                     ventaCreada.DetalleVenta.Add(detalleCreado);
                 }
@@ -145,7 +132,58 @@ namespace LibreriaElPortal_WebAPI.Repositories
             {
                 return null;
             }
-            
+
+        }
+
+        public async Task<bool> UpdateVentaAsync(VentaDto venta)
+        {
+            bool resultado = false;
+            try
+            {
+                //Borro los detalles anteriores para agregar los detalles actualizados.
+                var detallesAnteriores = _Context.DetalleVenta.Where(dv => dv.VentaId == venta.VentaId).ToList();
+                foreach (var detalle in detallesAnteriores)
+                {
+                    _Context.DetalleVenta.Remove(detalle);
+                    _Context.SaveChanges();
+                    //Devuelvo el stock del libro.
+                    await _libroRepository.UpdateStockLibroAsync(detalle.Isbn, (detalle.Cantidad * -1));
+                }
+
+                //Actualizo la venta:
+                var ventaParaActualizar = _mapper.Map<Venta>(venta);
+
+                _Context.Ventas.Update(ventaParaActualizar); //También inserta los detalles de la venta.
+                resultado = _Context.SaveChanges() > 0 ? true : false;                
+
+
+                //Recorro la lista de detalles actualizados para actualizar el stock de cada libro.
+                var detallesVenta = _mapper.Map<List<DetalleVentum>>(venta.DetalleVenta);
+                foreach (var nuevoDetalle in detallesVenta)
+                {                   
+                    await _libroRepository.UpdateStockLibroAsync(nuevoDetalle.Isbn, nuevoDetalle.Cantidad);
+                }
+
+                return resultado;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ExisteVentaAsync(int ventaId)
+        {
+            try
+            {
+                bool existe = await _Context.Ventas.AnyAsync(v => v.VentaId == ventaId);
+                return existe;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

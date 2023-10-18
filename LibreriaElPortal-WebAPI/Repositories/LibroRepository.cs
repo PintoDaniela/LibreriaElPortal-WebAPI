@@ -119,7 +119,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
         }
 
-        public async Task<bool?> UpdateStockLibroAsync(string isbn, int cantidadVendida)
+        public async Task<bool> UpdateStockLibroAsync(string isbn, int cantidadVendida)
         {
             try
             {
