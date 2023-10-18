@@ -10,10 +10,12 @@ namespace LibreriaElPortal_WebAPI.Controllers
     [ApiController]
     public class LibroController : Controller
     {       
-        public readonly ILibroRepository _libroRepository; 
-        public LibroController(ILibroRepository libroRepository)
+        public readonly ILibroRepository _libroRepository;
+        public readonly IDetalleVentaRepository _detalleVentaRepository;
+        public LibroController(ILibroRepository libroRepository, IDetalleVentaRepository detalleVentaRepository)
         {
             _libroRepository = libroRepository;
+            _detalleVentaRepository = detalleVentaRepository;
         }
 
         [HttpGet]
@@ -68,6 +70,7 @@ namespace LibreriaElPortal_WebAPI.Controllers
             {
                 return BadRequest("No se encuentra el libro que intenta actualizar.");
             }
+           
             var libroActualizado = await _libroRepository.UpdateLibroAsync(libro);
 
             if (!libroActualizado)
@@ -85,6 +88,13 @@ namespace LibreriaElPortal_WebAPI.Controllers
             {
                 return BadRequest("No se encuentra el libro que intenta eliminar.");
             }
+
+            var hayVentasAsociadas = await _detalleVentaRepository.ExistenDetallesVentaByLibroAsync(libro.Isbn);
+            if (hayVentasAsociadas)
+            {
+                return BadRequest($"No se puede eliminar el libro \"{libro.Titulo}\" ({libro.Isbn}) porque tiene ventas asociadas.");
+            }
+
             var libroEliminado = await _libroRepository.DeleteLibroAsync(libro.Isbn);
 
             if (!libroEliminado)
