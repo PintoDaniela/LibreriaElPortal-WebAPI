@@ -19,13 +19,16 @@ namespace LibreriaElPortal_WebAPI.Models
         public virtual DbSet<Cliente> Clientes { get; set; } = null!;
         public virtual DbSet<DetalleVentum> DetalleVenta { get; set; } = null!;
         public virtual DbSet<Libro> Libros { get; set; } = null!;
+        public virtual DbSet<TiposUsuario> TiposUsuarios { get; set; } = null!;
+        public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Venta> Ventas { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Name=DefaultConnection");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=elportal;Trusted_Connection=true;");
             }
         }
 
@@ -102,6 +105,27 @@ namespace LibreriaElPortal_WebAPI.Models
                 entity.Property(e => e.Titulo)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<TiposUsuario>(entity =>
+            {
+                entity.ToTable("TiposUsuario");
+
+                entity.Property(e => e.Descripcion)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Username, "UQ__Users__536C85E4478A662F")
+                    .IsUnique();
+
+                entity.Property(e => e.FechaAlta).HasColumnType("datetime");
+
+                entity.Property(e => e.PasswordHash).HasMaxLength(255);
+
+                entity.Property(e => e.Username).HasMaxLength(255);
             });
 
             modelBuilder.Entity<Venta>(entity =>

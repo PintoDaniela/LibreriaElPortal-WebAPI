@@ -1,11 +1,13 @@
 ﻿using LibreriaElPortal_WebAPI.DTOs;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibreriaElPortal_WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[Controller]")]
     [ApiController]
     public class LibroController : Controller

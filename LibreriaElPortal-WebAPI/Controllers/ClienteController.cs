@@ -3,11 +3,13 @@ using LibreriaElPortal_WebAPI.DTOs;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
 using LibreriaElPortal_WebAPI.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LibreriaElPortal_WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase
