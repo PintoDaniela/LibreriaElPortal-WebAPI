@@ -4,6 +4,15 @@
         <name>LibreriaElPortal-WebAPI</name>
     </assembly>
     <members>
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.AuthController.Register(LibreriaElPortal_WebAPI.DTOs.UserDto)">
+            <summary>
+            Elija un nombre de usuario y una contraseña para registrarse. La contraseña debe ser de al menos 8 caracteres y tener al menos 1 dígito numérico, 1 mayúscula, 1 minúscula y 1 caracter especial.
+            </summary>
+            <param name="newUser"></param>
+            <response code="201">Created. Registro efectuado con éxito.</response>
+            <response code="400">BadRequest. El formato de la solicitud no es válido o ya existe un usuario con el nombre ingresado.</response>
+            <response code="500">InternalServerError. Hubo un error al procesar la solicitud.</response>
+        </member>
         <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.Get">
             <summary>
             Devuelve el listado completo de clientes activos.

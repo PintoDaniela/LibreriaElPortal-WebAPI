@@ -7,5 +7,6 @@ namespace LibreriaElPortal_WebAPI.Interfaces
     {
         Task<User?> CreateUserAsync(UserDto newUser);
         Task<(bool, User?)> CheckUserCredentialsAsync(UserDto loginUser);
+        Task<bool> ExisteUsuarioByNameAsync(String userame);
     }
 }

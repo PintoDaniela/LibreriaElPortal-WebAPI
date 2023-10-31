@@ -75,6 +75,19 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
         }
 
+        public async Task<bool> ExisteUsuarioByNameAsync(string userame)
+        {            
+            try
+            {
+                bool existe = await _appDbContext.Users.AnyAsync(u => u.Username.Equals(userame.Trim()));
+                return existe;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogs(ex, "ExisteUsuarioByNameAsync");
+                return false;
+            }
+        }
 
         //--------------------------------------
         //Métodos auxiliares
@@ -87,5 +100,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             string mensaje = LogMessages.ExceptionLogMessage(ex, metodo);
             _logger.LogError(mensaje);
         }
+
+       
     }
 }
