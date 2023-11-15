@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibreriaElPortal_WebAPI.DTOs;
+using LibreriaElPortal_WebAPI.Helper;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -11,11 +12,13 @@ namespace LibreriaElPortal_WebAPI.Repositories
     {
         private readonly elportalContext _Context;
         private readonly IMapper _mapper;
+        private readonly ILogger<ClienteRepository> _logger;
 
-        public ClienteRepository(elportalContext elportalContext, IMapper mapper)
+        public ClienteRepository(elportalContext elportalContext, IMapper mapper, ILogger<ClienteRepository> logger)
         {
             _Context = elportalContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -45,6 +48,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetClientesAsync");
                 return null;
             }
            
@@ -69,6 +73,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch(Exception ex)
             {
+                ExceptionLogs(ex, "GetClienteAsync");
                 return null;
             }
             
@@ -94,7 +99,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
-                // Maneja las excepciones aquí si es necesario.
+                ExceptionLogs(ex, "CreateClienteAsync");
                 return null;
             }
         }
@@ -115,9 +120,10 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 _Context.Remove(cliente);
                 return await _Context.SaveChangesAsync() > 0 ? true : false;
             }
-            catch 
+            catch (Exception ex)
             {
-                return false; 
+                ExceptionLogs(ex, "DeleteClienteAsync");
+                return false;
             }
         }
 
@@ -130,8 +136,9 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 var resultado = await _Context.SaveChangesAsync() > 0 ? true : false;
                 return resultado;
             }
-            catch 
-            { 
+            catch (Exception ex)
+            {
+                ExceptionLogs(ex, "UpdateClienteAsync");
                 return false;
             }
         }
@@ -147,5 +154,19 @@ namespace LibreriaElPortal_WebAPI.Repositories
             var existeCliente = await _Context.Clientes.AnyAsync(c => c.Email == email);
             return existeCliente;                
         }
+
+
+        //--------------------------------------
+        //Métodos auxiliares
+        //--------------------------------------
+
+        ///// LOGS /////
+        //Los métodos que graban Logs se definen a nivel local porque el objeto _logger es propio de cada clase ej:  ILogger<AuthRepository>       
+        private void ExceptionLogs(Exception ex, string metodo)
+        {
+            string mensaje = LogMessages.ExceptionLogMessage(ex, metodo);
+            _logger.LogError(mensaje);
+        }
+
     }
 }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibreriaElPortal-WebAPI", "LibreriaElPortal-WebAPI\LibreriaElPortal-WebAPI.csproj", "{A475DB06-58A5-4E7E-A5F1-5A9C4AD7AD4E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibreriaElPortal-WebAPI", "LibreriaElPortal-WebAPI\LibreriaElPortal-WebAPI.csproj", "{A475DB06-58A5-4E7E-A5F1-5A9C4AD7AD4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{49A8CD5D-2909-45F1-9B07-DE3AF2B91273}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A475DB06-58A5-4E7E-A5F1-5A9C4AD7AD4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A475DB06-58A5-4E7E-A5F1-5A9C4AD7AD4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A475DB06-58A5-4E7E-A5F1-5A9C4AD7AD4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A8CD5D-2909-45F1-9B07-DE3AF2B91273}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A8CD5D-2909-45F1-9B07-DE3AF2B91273}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A8CD5D-2909-45F1-9B07-DE3AF2B91273}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A8CD5D-2909-45F1-9B07-DE3AF2B91273}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

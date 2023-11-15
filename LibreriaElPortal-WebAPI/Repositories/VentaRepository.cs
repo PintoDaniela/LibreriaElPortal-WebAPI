@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibreriaElPortal_WebAPI.DTOs;
+using LibreriaElPortal_WebAPI.Helper;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
 using Microsoft.AspNetCore.Identity;
@@ -13,12 +14,14 @@ namespace LibreriaElPortal_WebAPI.Repositories
         private readonly elportalContext _Context;
         private readonly IMapper _mapper;
         private readonly ILibroRepository _libroRepository;
+        private readonly ILogger<VentaRepository> _logger;
 
-        public VentaRepository(elportalContext context, IMapper mapper, ILibroRepository libroRepository)
+        public VentaRepository(elportalContext context, IMapper mapper, ILibroRepository libroRepository, ILogger<VentaRepository> logger)
         {
             _Context = context;
             _mapper = mapper;
             _libroRepository = libroRepository;
+            _logger = logger;
         }
 
         public async Task<ICollection<VentaDto>?> GetVentasAsync()
@@ -40,7 +43,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
                             .Where(d => d.VentaId == venta.VentaId)
                             .ToListAsync();
 
-                        ventaDto.DetalleVenta = _mapper.Map<List<DetalleVentaDto>>(detalles); // uso el mapper para convertir la lista "detalles" a una lista de DetalleVentaDto
+                        ventaDto.Detalles = _mapper.Map<List<DetalleVentaDto>>(detalles); // uso el mapper para convertir la lista "detalles" a una lista de DetalleVentaDto
 
                         VentasDto.Add(ventaDto);
                     }
@@ -50,6 +53,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetVentasAsync");
                 return null;
             }
         }
@@ -75,7 +79,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
                             .Where(d => d.VentaId == venta.VentaId)
                             .ToListAsync();
 
-                        ventaDto.DetalleVenta = _mapper.Map<List<DetalleVentaDto>>(detalles); // uso el mapper para convertir la lista "detalles" a una lista de DetalleVentaDto
+                        ventaDto.Detalles = _mapper.Map<List<DetalleVentaDto>>(detalles); // uso el mapper para convertir la lista "detalles" a una lista de DetalleVentaDto
 
                         VentasDto.Add(ventaDto);
                     }
@@ -85,6 +89,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetVentasByClienteAsync");
                 return null;
             }
         }
@@ -122,7 +127,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
 
                     //Agrego el detalle de la venta a la lista de detalles del objeto "ventaCreada".
                     var detalleCreado = _mapper.Map<DetalleVentaDto>(nuevoDetalle);
-                    ventaCreada.DetalleVenta.Add(detalleCreado);
+                    ventaCreada.Detalles.Add(detalleCreado);
                 }
 
                 return ventaCreada;
@@ -130,6 +135,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "CreateVentaAsync");
                 return null;
             }
 
@@ -158,7 +164,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
 
 
                 //Recorro la lista de detalles actualizados para actualizar el stock de cada libro.
-                var detallesVenta = _mapper.Map<List<DetalleVentum>>(venta.DetalleVenta);
+                var detallesVenta = _mapper.Map<List<DetalleVentum>>(venta.Detalles);
                 foreach (var nuevoDetalle in detallesVenta)
                 {                   
                     await _libroRepository.UpdateStockLibroAsync(nuevoDetalle.Isbn, nuevoDetalle.Cantidad);
@@ -169,6 +175,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "UpdateVentaAsync");
                 return false;
             }
         }
@@ -180,10 +187,23 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 bool existe = await _Context.Ventas.AnyAsync(v => v.VentaId == ventaId);
                 return existe;
             }
-            catch
+            catch(Exception ex)
             {
+                ExceptionLogs(ex, "ExisteVentaAsync");
                 return false;
             }
+        }
+
+        //--------------------------------------
+        //Métodos auxiliares
+        //--------------------------------------
+
+        ///// LOGS /////
+
+        private void ExceptionLogs(Exception ex, string metodo)
+        {
+            string mensaje = LogMessages.ExceptionLogMessage(ex, metodo);
+            _logger.LogError(mensaje);
         }
     }
 }

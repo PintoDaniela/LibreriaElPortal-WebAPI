@@ -137,7 +137,7 @@ try
 }
 catch (Exception ex)
 {
-    logger.Error(ex, "There has been an error.");
+    logger.Error(ex, "Hubo un error al ejecutar el programa.");
     throw;
 }
 finally

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibreriaElPortal_WebAPI.DTOs;
+using LibreriaElPortal_WebAPI.Helper;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +11,13 @@ namespace LibreriaElPortal_WebAPI.Repositories
     {
         private readonly elportalContext _Context;
         private readonly IMapper _mapper;
+        private readonly ILogger<LibroRepository> _logger;
 
-        public LibroRepository(elportalContext elportalContext, IMapper mapper)
+        public LibroRepository(elportalContext elportalContext, IMapper mapper, ILogger<LibroRepository> logger)
         {
             _Context = elportalContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -33,10 +36,11 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetLibrosAsync");
                 return null;
             }
-            
-           
+
+
         }
         public async Task<LibroDto?> GetLibroAsync(string Isbn)
         {
@@ -51,6 +55,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetLibroAsync");
                 return null;
             }
         }
@@ -70,6 +75,7 @@ namespace LibreriaElPortal_WebAPI.Repositories
             }
             catch (Exception ex)
             {
+                ExceptionLogs(ex, "CreateLibroAsync");
                 return null;
             }
         }
@@ -90,8 +96,9 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 }
                 return false;
             }
-            catch 
-            { 
+            catch (Exception ex)
+            {
+                ExceptionLogs(ex, "DeleteLibroAsync");
                 return false; 
             }
             
@@ -113,8 +120,9 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 bool existe = await _Context.Libros.AnyAsync(l => l.Isbn == Isbn);
                 return existe;
             }
-            catch
+            catch (Exception ex)
             {
+                ExceptionLogs(ex, "UpdateLibroAsync");
                 return false;
             }
         }
@@ -137,8 +145,9 @@ namespace LibreriaElPortal_WebAPI.Repositories
 
                 return updateOk;
             }
-            catch 
+            catch (Exception ex)
             {
+                ExceptionLogs(ex, "UpdateStockLibroAsync");
                 return false;
             }           
         }
@@ -158,8 +167,9 @@ namespace LibreriaElPortal_WebAPI.Repositories
                 }
                 return stock;
             }
-            catch 
+            catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetStockLibroAsync");
                 return 0;
             }            
         }
@@ -174,10 +184,22 @@ namespace LibreriaElPortal_WebAPI.Repositories
                                                  .FirstOrDefaultAsync();
                 return PrecioUnitario;
             }
-            catch
+            catch (Exception ex)
             {
+                ExceptionLogs(ex, "GetPrecioLibroAsync");
                 return decimal.Zero;
             }
+        }
+        //--------------------------------------
+        //Métodos auxiliares
+        //--------------------------------------
+
+        ///// LOGS /////
+
+        private void ExceptionLogs(Exception ex, string metodo)
+        {
+            string mensaje = LogMessages.ExceptionLogMessage(ex, metodo);
+            _logger.LogError(mensaje);
         }
     }
 }

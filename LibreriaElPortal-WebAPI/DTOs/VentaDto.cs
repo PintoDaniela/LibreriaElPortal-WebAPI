@@ -7,7 +7,7 @@ namespace LibreriaElPortal_WebAPI.DTOs
         public int VentaId { get; set; }
         public DateTime FechaVenta { get; set; }
         public int? ClienteId { get; set; }
-        public ICollection<DetalleVentaDto> DetalleVenta { get; set; } = new List<DetalleVentaDto>();
+        public ICollection<DetalleVentaDto> Detalles { get; set; } = new List<DetalleVentaDto>();
 
     }
 }
