@@ -27,13 +27,13 @@ namespace LibreriaElPortal_WebAPI.Repositories
             try
             {
                 var clientes = await _Context.Clientes.ToListAsync();
-               
+
                 if (clientes != null)
                 {
                     var listaClientes = _mapper.Map<List<ClienteDto>>(clientes);
                     return listaClientes;
                 }
-               
+
                 //con el mapper no hace falta hacer la asignación de valores. Sólo se vale si los atributos del DTO y la entidad se llaman igual.
                 //var listaClientes = clinetes.Select(c => new ClienteDto
                 //{
@@ -44,14 +44,14 @@ namespace LibreriaElPortal_WebAPI.Repositories
 
                 //}).ToList();               
                 return null;
-                
+
             }
             catch (Exception ex)
             {
                 ExceptionLogs(ex, "GetClientesAsync");
                 return null;
             }
-           
+
         }
 
         public async Task<ClienteDto?> GetClienteAsync(int id)

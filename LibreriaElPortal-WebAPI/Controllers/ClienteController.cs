@@ -6,6 +6,7 @@ using LibreriaElPortal_WebAPI.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Expressions;
 
 namespace LibreriaElPortal_WebAPI.Controllers
 {
@@ -32,7 +33,7 @@ namespace LibreriaElPortal_WebAPI.Controllers
         [HttpGet("ListadoClientes")]
         [ProducesResponseType(typeof(IEnumerable<ClienteDto>), 200)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]        
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Get()
         {
             var listaClientes = await _clienteRepository.GetClientesAsync();
@@ -41,7 +42,7 @@ namespace LibreriaElPortal_WebAPI.Controllers
             {
                 return NotFound("No se encontraron registros.");
             }
-            
+
             return Ok(listaClientes);
         }
 

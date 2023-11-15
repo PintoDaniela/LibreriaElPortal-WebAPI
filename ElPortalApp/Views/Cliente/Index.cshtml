@@ -1,0 +1,44 @@
+﻿@model List<Shared.DTOs.ClienteDto>
+
+@{
+    ViewData["Title"] = "Clientes home";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Listado de clientes</h1>
+    @*<p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        Listado de Clientes
+    </div>
+    <div class="card-body">       
+        <hr />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Fecha de alta</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var item in Model){
+                    <tr>
+                        <td>@item.ClienteId</td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Email</td>
+                        <td>@item.Telefono</td>
+                        <td>@item.FechaAlta</td>                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
