@@ -1,4 +1,4 @@
-﻿using LibreriaElPortal_WebAPI.DTOs;
+﻿using Shared.DTOs;
 
 namespace LibreriaElPortal_WebAPI.Interfaces
 {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibreriaElPortal_WebAPI.DTOs;
+using Shared.DTOs;
 using LibreriaElPortal_WebAPI.Models;
 using System.Diagnostics.Metrics;
 

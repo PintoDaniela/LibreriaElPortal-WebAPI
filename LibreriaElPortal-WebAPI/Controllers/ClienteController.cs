@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using LibreriaElPortal_WebAPI.DTOs;
+using Shared.DTOs;
 using LibreriaElPortal_WebAPI.Interfaces;
 using LibreriaElPortal_WebAPI.Models;
 using LibreriaElPortal_WebAPI.Repositories;

@@ -4,7 +4,7 @@
         <name>LibreriaElPortal-WebAPI</name>
     </assembly>
     <members>
-        <member name="M:LibreriaElPortal_WebAPI.Controllers.AuthController.Register(LibreriaElPortal_WebAPI.DTOs.UserDto)">
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.AuthController.Register(Shared.DTOs.UserDto)">
             <summary>
             Elija un nombre de usuario y una contraseña para registrarse. La contraseña debe ser de al menos 8 caracteres y tener al menos 1 dígito numérico, 1 mayúscula, 1 minúscula y 1 caracter especial.
             </summary>
@@ -26,14 +26,14 @@
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.CrearCliente(LibreriaElPortal_WebAPI.DTOs.AgregarClienteDto)">
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.CrearCliente(Shared.DTOs.AgregarClienteDto)">
             <summary>
             Recibe información de un cliente desde el cuerpo de la solicitud (ver ejemplo de "Request Body") para crear un nuevo registro.
             </summary>
             <param name="cliente"></param>
             <returns></returns>
         </member>
-        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.UpdateCliente(LibreriaElPortal_WebAPI.DTOs.ClienteDto)">
+        <member name="M:LibreriaElPortal_WebAPI.Controllers.ClienteController.UpdateCliente(Shared.DTOs.ClienteDto)">
             <summary>
             Recibe información de un cliente desde el cuerpo de la solicitud (ver ejemplo de "Request Body") para actualizar un registro existente.
             </summary>
