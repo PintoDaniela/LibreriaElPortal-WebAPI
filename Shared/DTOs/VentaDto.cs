@@ -1,5 +1,6 @@
-﻿
-namespace LibreriaElPortal_WebAPI.DTOs
+﻿using Shared.Models;
+
+namespace Shared.DTOs
 {
     public class VentaDto
     {
