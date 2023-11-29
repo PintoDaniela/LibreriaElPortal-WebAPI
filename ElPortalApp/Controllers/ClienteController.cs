@@ -12,11 +12,11 @@ namespace ElPortalApp.Controllers
             _servicioCliente = clienteService;            
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var lista = await _servicioCliente.GetClientesAsync();
             return View(lista);
         }
     }
-}
+} 

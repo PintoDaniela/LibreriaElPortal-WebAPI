@@ -3,6 +3,11 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome <br /> <iconify-icon icon="game-icons:spell-book"></iconify-icon></h1>
+    
+    <div class="list-group">   
+        <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Cliente" asp-action="Index"> <iconify-icon icon="fa-solid:book-reader" style="color:darkblue;"></iconify-icon> Clientes</a>
+        <a href="#" class="list-group-item list-group-item-action"><iconify-icon icon="twemoji:books"></iconify-icon> Libros</a>
+        <a href="#" class="list-group-item list-group-item-action"><iconify-icon icon="emojione:shopping-bags"></iconify-icon> Ventas</a>
+    </div>
 </div>

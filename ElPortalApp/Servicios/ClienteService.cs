@@ -8,32 +8,36 @@ namespace ElPortalApp.Servicios
 {
     public class ClienteService : IClienteService
     {
+        private readonly IHttpClientFactory _httpClient;
         private static string _usuario;
         private static string _clave;
-        private static string _baseUrl;
+        //private static string _baseUrl;
         private static string? _token;
 
-        public ClienteService()
+        public ClienteService(IHttpClientFactory httpClient)
         {
 
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
 
             _usuario = builder.GetSection("ApiSetting:usuario").Value;
             _clave = builder.GetSection("ApiSetting:clave").Value;
-            _baseUrl = builder.GetSection("ApiSetting:baseUrl").Value;
+            //_baseUrl = builder.GetSection("ApiSetting:baseUrl").Value;
+            _httpClient = httpClient;
         }
 
         //USAR REFERENCIAS 
         public async Task Autenticar()
-        {
+            {
 
-            var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri(_baseUrl);
+            //var cliente = new HttpClient();
+            //cliente.BaseAddress = new Uri(_baseUrl);
+            var httpClient = _httpClient.CreateClient("ElPortalAPI");
+            
 
             var credenciales = new UserDto() { Username = _usuario, Password = _clave };
 
             var content = new StringContent(JsonConvert.SerializeObject(credenciales), Encoding.UTF8, "application/json");
-            var response = await cliente.PostAsync("/api/Auth/login", content);
+            var response = await httpClient.PostAsync("/api/Auth/login", content);
             var json_respuesta = await response.Content.ReadAsStringAsync();
 
             var resultado = JsonConvert.DeserializeObject<JwtToken>(json_respuesta);
@@ -46,12 +50,12 @@ namespace ElPortalApp.Servicios
             List<ClienteDto> lista = new List<ClienteDto>();
 
             await Autenticar();
+            var httpClient = _httpClient.CreateClient("ElPortalAPI");
 
-
-            var cliente = new HttpClient();
-            cliente.BaseAddress = new Uri(_baseUrl);
-            cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
-            var response = await cliente.GetAsync("/api/Cliente/ListadoClientes");
+            //var cliente = new HttpClient();
+            //cliente.BaseAddress = new Uri(_baseUrl);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            var response = await httpClient.GetAsync("/api/Cliente/ListadoClientes");
 
             if (response.IsSuccessStatusCode)
             {
@@ -74,9 +78,25 @@ namespace ElPortalApp.Servicios
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteClienteAsync(int id)
+        public async Task<bool> DeleteClienteAsync(int id)
         {
-            throw new NotImplementedException();
+            bool respuesta = false;
+
+            await Autenticar();
+
+
+            var httpClient = _httpClient.CreateClient("ElPortalAPI");
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+
+
+            var response = await httpClient.DeleteAsync($"/api/Cliente/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                respuesta = true;
+            }
+
+            return respuesta;
         }
 
         public Task<bool> ExisteClienteAsync(int id)
