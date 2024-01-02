@@ -1,4 +1,6 @@
-﻿namespace Shared.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Shared.DTOs
 {
     public class LibroDto
     {
@@ -8,5 +10,7 @@
         public string? Genero { get; set; }
         public decimal? Precio { get; set; }
         public int? Stock { get; set; }
+        [MaxLength(300)]
+        public string? Foto { get; set; }
     }
 }

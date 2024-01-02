@@ -16,6 +16,7 @@ namespace LibreriaElPortal_WebAPI.Models
         public string? Genero { get; set; }
         public decimal Precio { get; set; }
         public int Stock { get; set; }
+        public string? Foto { get; set; }
 
         public virtual ICollection<DetalleVentum> DetalleVenta { get; set; }
     }
