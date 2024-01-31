@@ -32,7 +32,7 @@ namespace LibreriaElPortal_WebAPI.Models
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {          
             modelBuilder.Entity<Cliente>(entity =>
             {
                 entity.Property(e => e.ClienteId).HasColumnName("ClienteID");

@@ -16,5 +16,7 @@ namespace LibreriaElPortal_WebAPI.Models
 
         public virtual Cliente? Cliente { get; set; }
         public virtual ICollection<DetalleVentum> DetalleVenta { get; set; }
+       // public string? Observaciones { get; set; } = "";
+
     }
 }
