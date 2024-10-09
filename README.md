@@ -1,5 +1,7 @@
-# El Portal - Web API
-💾 Es un proyecto ASP.NET Core Web API en progreso basado en el enfoque DB First.<br>
+# El Portal - Web API + MVC
+💾 Es una solución ASP.NET Core compuesta por dos proyectos: una Web API y una aplicación MVC (en construcción).<br>
+
+## Sobre la API
 📚 Tiene como finalidad gestionar el acceso a la base de datos (SQL Server) desde una Aplicación MVC de una librería ficticia.<br>
 📑 La API utiliza Swagger como herramienta de documentación interactiva.<br>
 🔒 Se usa sistema de autehticación JWT Token para proteger en acceso a los recursos de la API.
